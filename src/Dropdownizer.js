@@ -88,7 +88,8 @@ class Dropdownizer {
   _setDropdown() {
     this._ui.div.dropdownizer = this;
     this._ui.div.style.width = this._el.offsetWidth + "px";
-    this._ui.div.classList = `${this._el.classList} ${CLASS_NAME}`;
+    this._ui.div.classList = this._el.classList;
+    this._ui.div.classList.add(CLASS_NAME);
 
     this._ui.div.appendChild(this._ui.btn);
     this._ui.div.appendChild(this._ui.ul);
