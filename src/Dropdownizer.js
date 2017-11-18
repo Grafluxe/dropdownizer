@@ -9,12 +9,28 @@ const CLASS_NAME = "dropdownizer";
 class Dropdownizer{
 
   constructor(el) {
-    if (el.nodeType) {
-      new Dropdownize(el).change(evt => this._onChange(evt));
-    } else {
-      el.forEach(element => {
-        new Dropdownize(element).change(evt => this._onChange(evt));
-      });
+    try {
+      if (typeof el === "string") {
+        el = document.querySelector(el);
+      } else if(el instanceof Array) {
+        el = el.map(element => document.querySelector(element));
+      }
+
+      if (el.nodeType) {
+        new Dropdownize(el).change(this._onChangeProxy.bind(this));
+      } else {
+        el.forEach(element => {
+          new Dropdownize(element).change(this._onChangeProxy.bind(this));
+        });
+      }
+    } catch (err) {
+      throw new Error("No such element exists");
+    }
+  }
+
+  _onChangeProxy(evt) {
+    if(this._onChange) {
+      this._onChange(evt);
     }
   }
 
