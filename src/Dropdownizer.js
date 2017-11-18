@@ -133,7 +133,8 @@ class Dropdownizer {
 
       this._onChange({
         type: "change",
-        target: listItem,
+        target: this._ui.div,
+        selectedTarget: listItem,
         data
       });
     }
@@ -154,6 +155,7 @@ class Dropdownizer {
   change(callback) {
     this._onChange = callback;
   }
+
 }
 
 // Support CJS/Node
