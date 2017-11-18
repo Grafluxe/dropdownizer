@@ -6,7 +6,25 @@
 
 const CLASS_NAME = "dropdownizer";
 
-class Dropdownizer {
+class Dropdownizer{
+
+  constructor(el) {
+    if (el.nodeType) {
+      new Dropdownize(el).change(evt => this._onChange(evt));
+    } else {
+      el.forEach(element => {
+        new Dropdownize(element).change(evt => this._onChange(evt));
+      });
+    }
+  }
+
+  change(callback) {
+    this._onChange = callback;
+  }
+
+}
+
+class Dropdownize {
 
   constructor(el) {
     this._el = el;
