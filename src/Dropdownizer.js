@@ -115,17 +115,17 @@ class Dropdownize {
       return;
     }
 
-    if (!this._touchable) {
+    if (this._touchable) {
+      this._el.classList.remove("dd-x");
+      this._el.focus();
+      this._el.classList.add("dd-x");
+    } else {
       if (this._ui.div.classList.contains("dd-open")) {
         this._closeList();
       } else {
         this._ui.div.classList.add("dd-open");
         this._ui.div.addEventListener("mouseleave", this._onMouseLeave);
       }
-    } else {
-      this._el.classList.remove("dd-x");
-      this._el.focus();
-      this._el.classList.add("dd-x");
     }
   }
 
