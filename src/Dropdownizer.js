@@ -95,16 +95,16 @@ class Dropdownize {
     let touchable = window.hasOwnProperty("ontouchstart") || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 
     this._closeList = () => {
-      this._ui.div.classList.remove(CLASS_NAME + "Open");
+      this._ui.div.classList.remove("dd-open");
       this._ui.div.removeEventListener("mouseleave", this._closeList);
     };
 
     this._ui.btn.addEventListener("click", () => {
       if (!touchable) {
-        if (this._ui.div.classList.contains(CLASS_NAME + "Open")) {
+        if (this._ui.div.classList.contains("dd-open")) {
           this._closeList();
         } else {
-          this._ui.div.classList.add(CLASS_NAME + "Open");
+          this._ui.div.classList.add("dd-open");
           this._ui.div.addEventListener("mouseleave", () => setTimeout(this._closeList, 250));
         }
       } else {
@@ -182,8 +182,7 @@ class Dropdownize {
       this._el.id = "__" + this._el.id;
     }
 
-    this._el.style.display = "none";
-    this._el.removeAttribute("class");
+    this._el.classList = "dd-x";
   }
 
   change(callback) {
