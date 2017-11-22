@@ -219,6 +219,16 @@ class Dropdownize {
     this._onChange = callback;
   }
 
+  removeListeners() {
+    this._ui.btn.removeEventListener("click", this._onClickBtn);
+    this._ui.div.removeEventListener("mouseleave", this._onMouseLeave);
+    this._el.removeEventListener("change", this._onChange);
+
+    this._listItems.forEach(listItem => {
+      listItem.removeEventListener("click", this._onClickListItem);
+    });
+  }
+
 }
 
 // Support CJS/Node
