@@ -45,8 +45,8 @@ class Dropdownizer{
     return this;
   }
 
-  destroy(resetSelect = false) {
-    this.dropdowns.forEach(dropdown => dropdown.destroy(resetSelect));
+  destroy(resetOriginalElement = false) {
+    this.dropdowns.forEach(dropdown => dropdown.destroy(resetOriginalElement));
     return this;
   }
 
@@ -274,14 +274,14 @@ class Dropdownize {
     return this;
   }
 
-  destroy(resetSelect = false) {
+  destroy(resetOriginalElement = false) {
     if (!this._destroyed) {
       this._destroyed = true;
 
       this.removeListeners();
       this._el.parentNode.removeChild(this._ui.div);
 
-      if (resetSelect) {
+      if (resetOriginalElement) {
         if (this._origId) {
           this._el.id = this._origId;
         }
