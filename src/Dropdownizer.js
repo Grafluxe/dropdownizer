@@ -7,6 +7,8 @@
 class Dropdownizer{
 
   constructor(el) {
+    let dds = [];
+
     if (typeof el === "string") {
       el = document.querySelector(el);
     } else if(el instanceof Array) {
@@ -18,22 +20,34 @@ class Dropdownizer{
     }
 
     if (el.nodeType) {
-      new Dropdownize(el).change(this._onChangeProxy.bind(this));
+      dds.push(new Dropdownize(el));
     } else {
       el.forEach(element => {
-        new Dropdownize(element).change(this._onChangeProxy.bind(this));
+        dds.push(new Dropdownize(element));
       });
     }
+
+    this.dropdowns = Object.freeze(dds);
   }
 
-  _onChangeProxy(evt) {
-    if(this._onChange) {
-      this._onChange(evt);
-    }
+  selectItem(index) {
+    this.dropdowns.forEach(dropdown => dropdown.selectItem(index));
+    return this;
   }
 
   change(callback) {
-    this._onChange = callback;
+    this.dropdowns.forEach(dropdown => dropdown.change(callback));
+    return this;
+  }
+
+  removeListeners() {
+    this.dropdowns.forEach(dropdown => dropdown.removeListeners());
+    return this;
+  }
+
+  destroy(resetSelect = false) {
+    this.dropdowns.forEach(dropdown => dropdown.destroy(resetSelect));
+    return this;
   }
 
   static preventNative() {
