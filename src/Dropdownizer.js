@@ -4,27 +4,25 @@
 * @license MIT
 */
 
-const CLASS_NAME = "dropdownizer";
-
 class Dropdownizer{
 
   constructor(el) {
-    try {
-      if (typeof el === "string") {
-        el = document.querySelector(el);
-      } else if(el instanceof Array) {
-        el = el.map(element => document.querySelector(element));
-      }
+    if (typeof el === "string") {
+      el = document.querySelector(el);
+    } else if(el instanceof Array) {
+      el = el.map(element => document.querySelector(element));
+    }
 
-      if (el.nodeType) {
-        new Dropdownize(el).change(this._onChangeProxy.bind(this));
-      } else {
-        el.forEach(element => {
-          new Dropdownize(element).change(this._onChangeProxy.bind(this));
-        });
-      }
-    } catch (err) {
-      throw new Error("No such element exists");
+    if (!el) {
+      throw new Error("No such element exists.");
+    }
+
+    if (el.nodeType) {
+      new Dropdownize(el).change(this._onChangeProxy.bind(this));
+    } else {
+      el.forEach(element => {
+        new Dropdownize(element).change(this._onChangeProxy.bind(this));
+      });
     }
   }
 
@@ -46,10 +44,11 @@ class Dropdownize {
     this._el = el;
 
     this._createElements();
+    this._bindEvents();
     this._convertOptionsToListItems();
     this._setBtn();
     this._setDropdown();
-    this._configureListItems();
+    this._addListItemsListeners();
     this._addToDOM();
   }
 
@@ -59,6 +58,13 @@ class Dropdownize {
       btn: document.createElement("button"),
       ul: document.createElement("ul")
     };
+  }
+
+  _bindEvents() {
+    this._onClickBtn = this._openList.bind(this);
+    this._onMouseLeave = () => setTimeout(this._closeList.bind(this), 250);
+    this._onChange = this._syncDropdowns.bind(this);
+    this._onClickListItem = this._listSelect.bind(this);
   }
 
   _convertOptionsToListItems() {
@@ -92,77 +98,78 @@ class Dropdownize {
   }
 
   _setBtn() {
-    let touchable = window.hasOwnProperty("ontouchstart") || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-
-    this._closeList = () => {
-      this._ui.div.classList.remove("dd-open");
-      this._ui.div.removeEventListener("mouseleave", this._closeList);
-    };
-
+    this._touchable = window.hasOwnProperty("ontouchstart") || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
     this._bindFromOriginalElement();
-
-    this._ui.btn.addEventListener("click", evt => {
-      evt.preventDefault();
-
-      if (this._ui.div.hasAttribute("disabled") || this._el.hasAttribute("disabled")) {
-        return;
-      }
-
-      if (!touchable) {
-        if (this._ui.div.classList.contains("dd-open")) {
-          this._closeList();
-        } else {
-          this._ui.div.classList.add("dd-open");
-          this._ui.div.addEventListener("mouseleave", () => setTimeout(this._closeList, 250));
-        }
-      } else {
-        this._el.focus();
-      }
-    });
-
+    this._ui.btn.addEventListener("click", this._onClickBtn);
     this._ui.btn.innerHTML = this._options[this._lastSelectedIndex].label;
   }
 
+  _openList(evt) {
+    evt.preventDefault();
+
+    if (this._ui.div.hasAttribute("disabled") || this._el.hasAttribute("disabled")) {
+      return;
+    }
+
+    if (!this._touchable) {
+      if (this._ui.div.classList.contains("dd-open")) {
+        this._closeList();
+      } else {
+        this._ui.div.classList.add("dd-open");
+        this._ui.div.addEventListener("mouseleave", this._onMouseLeave);
+      }
+    } else {
+      this._el.focus();
+    }
+  }
+
+  _closeList() {
+    this._ui.div.classList.remove("dd-open");
+  }
+
   _bindFromOriginalElement() {
-    this._el.addEventListener("change", evt => {
-      let selectedListItem = this._listItems[evt.target.options.selectedIndex];
+    this._el.addEventListener("change", this._onChange);
+  }
 
-      this._changeFromOriginalElement = true;
+  _syncDropdowns(evt) {
+    let selectedListItem = this._listItems[evt.target.options.selectedIndex];
 
-      selectedListItem.click();
-      selectedListItem.focus();
-    });
+    this._changeFromOriginalElement = true;
+
+    selectedListItem.click();
+    selectedListItem.focus();
   }
 
   _setDropdown() {
     this._ui.div.dropdownizer = this;
     this._ui.div.style.width = this._el.offsetWidth + "px";
     this._ui.div.classList = this._el.classList;
-    this._ui.div.classList.add(CLASS_NAME);
+    this._ui.div.classList.add("dropdownizer");
 
     this._ui.div.appendChild(this._ui.btn);
     this._ui.div.appendChild(this._ui.ul);
   }
 
-  _configureListItems() {
+  _addListItemsListeners() {
     this._listItems.forEach(listItem => {
-      listItem.addEventListener("click", () => {
-        if (listItem.dataset.disabled) {
-          return;
-        }
-
-        this.selectItem(this._listItems.indexOf(listItem));
-        this._closeList();
-      });
+      listItem.addEventListener("click", this._onClickListItem);
     });
+  }
+
+  _listSelect(evt) {
+    if (evt.target.dataset.disabled) {
+      return;
+    }
+
+    this.selectItem(this._listItems.indexOf(evt.target));
+    this._closeList();
   }
 
   selectItem(index) {
     let listItem = this._listItems[index];
 
     if (!listItem) {
-      console.error("Your index is out of bounds");
-      return;
+      throw new Error("Your index is out of bounds.");
     }
 
     if (listItem === this._listItems[this._lastSelectedIndex]) {
