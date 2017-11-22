@@ -43,6 +43,10 @@ class Dropdownize {
   constructor(el) {
     this._el = el;
 
+    if (el.classList.contains("dropdownizer")) {
+      throw new Error("The class name 'dropdownizer' is reserved. Please choose a different class name.");
+    }
+
     this._createElements();
     this._bindEvents();
     this._convertOptionsToListItems();
