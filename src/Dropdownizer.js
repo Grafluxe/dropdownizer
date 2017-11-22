@@ -208,10 +208,13 @@ class Dropdownize {
     this._el.parentNode.insertBefore(this._ui.div, this._el.nextSibling);
 
     if (this._el.id) {
+      this._origId = this._el.id;
+
       this._ui.div.id = this._el.id;
       this._el.id = "__" + this._el.id;
     }
 
+    this._origClasses = this._el.classList.toString();
     this._el.classList = "dd-x";
   }
 
@@ -227,6 +230,23 @@ class Dropdownize {
     this._listItems.forEach(listItem => {
       listItem.removeEventListener("click", this._onClickListItem);
     });
+  }
+
+  destroy(resetSelect = false) {
+    if (!this._destroyed) {
+      this._destroyed = true;
+
+      this.removeListeners();
+      this._el.parentNode.removeChild(this._ui.div);
+
+      if (resetSelect) {
+        if (this._origId) {
+          this._el.id = this._origId;
+        }
+
+        this._el.classList = this._origClasses;
+      }
+    }
   }
 
 }
