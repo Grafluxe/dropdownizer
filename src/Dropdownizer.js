@@ -225,6 +225,7 @@ class Dropdownize {
     }
 
     this._changeFromOriginalElement = false;
+    return this;
   }
 
   _addToDOM() {
@@ -243,6 +244,7 @@ class Dropdownize {
 
   change(callback) {
     this._changeCallback = callback;
+    return this;
   }
 
   removeListeners() {
@@ -254,6 +256,8 @@ class Dropdownize {
     this._listItems.forEach(listItem => {
       listItem.removeEventListener("click", this._onClickListItem);
     });
+
+    return this;
   }
 
   destroy(resetSelect = false) {
@@ -271,6 +275,8 @@ class Dropdownize {
         this._el.classList = this._origClasses;
       }
     }
+
+    return this;
   }
 
 }
