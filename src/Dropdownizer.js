@@ -36,6 +36,10 @@ class Dropdownizer{
     this._onChange = callback;
   }
 
+  static preventNative() {
+    Dropdownize._preventNative = true;
+  }
+
 }
 
 class Dropdownize {
@@ -69,6 +73,7 @@ class Dropdownize {
     this._onMouseLeave = () => setTimeout(this._closeList.bind(this), 250);
     this._onChange = this._syncDropdowns.bind(this);
     this._onClickListItem = this._listSelect.bind(this);
+    this._onDocClick = this._preventNativeClick.bind(this);
   }
 
   _convertOptionsToListItems() {
@@ -115,7 +120,7 @@ class Dropdownize {
       return;
     }
 
-    if (this._touchable) {
+    if (this._touchable && !Dropdownize._preventNative) {
       this._el.classList.remove("dd-x");
       this._el.focus();
       this._el.classList.add("dd-x");
@@ -124,8 +129,20 @@ class Dropdownize {
         this._closeList();
       } else {
         this._ui.div.classList.add("dd-open");
-        this._ui.div.addEventListener("mouseleave", this._onMouseLeave);
+
+        if (Dropdownize._preventNative) {
+          document.addEventListener("click", this._onDocClick);
+        } else {
+          this._ui.div.addEventListener("mouseleave", this._onMouseLeave);
+        }
       }
+    }
+  }
+
+  _preventNativeClick(evt) {
+    if (evt.target.parentNode !== this._ui.div) {
+      document.removeEventListener("click", this._onDocClick);
+      this._closeList();
     }
   }
 
@@ -232,6 +249,7 @@ class Dropdownize {
     this._ui.btn.removeEventListener("click", this._onClickBtn);
     this._ui.div.removeEventListener("mouseleave", this._onMouseLeave);
     this._el.removeEventListener("change", this._onChange);
+    document.removeEventListener("click", this._onDocClick);
 
     this._listItems.forEach(listItem => {
       listItem.removeEventListener("click", this._onClickListItem);
