@@ -123,7 +123,9 @@ class Dropdownize {
         this._ui.div.addEventListener("mouseleave", this._onMouseLeave);
       }
     } else {
+      this._el.classList.remove("dd-x");
       this._el.focus();
+      this._el.classList.add("dd-x");
     }
   }
 
