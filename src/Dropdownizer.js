@@ -207,12 +207,12 @@ class Dropdownize {
 
     this._el.selectedIndex = this._lastSelectedIndex;
 
-    if (this._onChange) {
+    if (this._changeCallback) {
       let data = Object.assign({}, listItem.dataset);
 
       delete data.selected;
 
-      this._onChange({
+      this._changeCallback({
         type: "change",
         target: this._ui.div,
         selectedTarget: listItem,
@@ -242,7 +242,7 @@ class Dropdownize {
   }
 
   change(callback) {
-    this._onChange = callback;
+    this._changeCallback = callback;
   }
 
   removeListeners() {
