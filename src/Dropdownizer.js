@@ -99,7 +99,15 @@ class Dropdownize {
       this._ui.div.removeEventListener("mouseleave", this._closeList);
     };
 
-    this._ui.btn.addEventListener("click", () => {
+    this._bindFromOriginalElement();
+
+    this._ui.btn.addEventListener("click", evt => {
+      evt.preventDefault();
+
+      if (this._ui.div.hasAttribute("disabled") || this._el.hasAttribute("disabled")) {
+        return;
+      }
+
       if (!touchable) {
         if (this._ui.div.classList.contains("dd-open")) {
           this._closeList();
@@ -109,14 +117,21 @@ class Dropdownize {
         }
       } else {
         this._el.focus();
-        this._el.addEventListener("change", evt => {
-          evt.preventDefault();
-          this._listItems[evt.target.options.selectedIndex].click();
-        });
       }
     });
 
     this._ui.btn.innerHTML = this._options[this._lastSelectedIndex].label;
+  }
+
+  _bindFromOriginalElement() {
+    this._el.addEventListener("change", evt => {
+      let selectedListItem = this._listItems[evt.target.options.selectedIndex];
+
+      this._changeFromOriginalElement = true;
+
+      selectedListItem.click();
+      selectedListItem.focus();
+    });
   }
 
   _setDropdown() {
@@ -160,6 +175,8 @@ class Dropdownize {
     this._ui.btn.innerHTML = listItem.innerHTML;
     listItem.setAttribute("data-selected", true);
 
+    this._el.selectedIndex = this._lastSelectedIndex;
+
     if (this._onChange) {
       let data = Object.assign({}, listItem.dataset);
 
@@ -172,6 +189,12 @@ class Dropdownize {
         data
       });
     }
+
+    if (!this._changeFromOriginalElement) {
+      this._el.dispatchEvent(new Event("change"));
+    }
+
+    this._changeFromOriginalElement = false;
   }
 
   _addToDOM() {
