@@ -7,85 +7,79 @@
 @charset "UTF-8";
 
 .dropdownizer {
-  font-family: sans-serif;
-  font-size: 12px;
   display: inline-block;
   position: relative;
+  font-family: sans-serif;
+  font-size: 11px;
   min-width: 60px;
 }
 
-.dropdownizer button {
+.dropdownizer button, .dropdownizer ul  {
   background-color: #fff;
+  color: #000;
+  text-align: left;
+  border: 1px solid #ccc;
+  font-size: inherit;
+}
+
+.dropdownizer button {
+  position: relative;
   width: 100%;
   height: 100%;
-  text-align: left;
+  border-radius: 4px;
   outline: none;
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   margin: 0;
-  padding: 1px 16px 1px 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  position: relative;
+  padding: 0 20px 0 6px;
+  line-height: 1.5;
 }
 
 .dropdownizer button:after {
   content: "\25bc";
-  font-size: 60%;
   position: absolute;
-  right: 5px;
+  font-size: 60%;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  padding-top: 1px;
 }
 
 .dropdownizer ul {
-  background-color: #fff;
   display: none;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 2px;
-  cursor: pointer;
   position: absolute;
-  border: 1px solid #ccc;
-  border-bottom-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-top: 0;
-  z-index: 1;
+  list-style: none;
+  margin: -4px 0 0;
+  padding: 4px 0;
   min-width: 100%;
-  text-align: left;
-  cursor: default;
+  z-index: 1;
   box-sizing: border-box;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   white-space: nowrap;
+  cursor: default;
+  border-top: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .dropdownizer li {
-  padding: 0 5px;
+  padding: 1px 6px;
 }
 
 .dropdownizer li:hover {
-  background-color: #f6f6f6;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.dropdownizer li[data-selected='true'] {
+.dropdownizer li[data-selected="true"] {
   font-weight: bold;
 }
 
-.dropdownizer li[data-disabled='true'] {
-  opacity: 0.4;
+.dropdownizer li[data-disabled="true"] {
   background-color: transparent;
-}
-
-.dd-open button {
-  border-bottom: 0;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  opacity: 0.4;
 }
 
 .dd-open ul {
