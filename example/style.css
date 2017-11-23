@@ -1,0 +1,132 @@
+body {
+  background-color: #f6f6f6;
+  margin: 20px;
+  font: 12px sans-serif;
+  color: #999;
+}
+
+section {
+  margin: auto;
+  max-width: 300px;
+}
+
+h1 {
+  color: #000;
+  font-size: 25px;
+}
+
+code {
+  margin-bottom: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #eee;
+  color: #666;
+}
+
+hr {
+  margin: 20px 0;
+  border-color: #fff;
+}
+
+/* top list */
+
+.top-list > button:after {
+  content: "\25b2";
+}
+
+.top-list.dd-open ul {
+  bottom: 100%;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: -4px;
+}
+
+/* custom */
+
+#custom > button, #custom > ul  {
+  border-radius: 0;
+}
+
+#custom {
+  height: 30px;
+  min-width: 200px;
+}
+
+#custom > button {
+  border: 2px solid #000;
+  background-color: #e0e0bf;
+  box-shadow: 0 0 0 2px #fff inset, 0 -12px #d6d6a6 inset;
+}
+
+#custom.dd-open > button {
+  border-color: #459528;
+  background-color: #cde0bf;
+  box-shadow: 0 0 0 2px #fff inset, 0 -12px #aace8c inset;
+}
+
+#custom.dd-open > button:after {
+  content: "";
+}
+
+#custom > ul {
+  opacity: 0;
+  margin-top: 10px;
+  transition: opacity 0.4s, margin 0.4s;
+  display: block;
+  height: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+#custom.dd-open > ul {
+  border: 2px solid #76bf5b;
+  height: auto;
+  opacity: 1;
+  padding: 5px 0;
+  margin-top: 2px;
+}
+
+#custom > ul > li[data-selected='true'] {
+  background-color: #eaf4e3;
+  font-weight: normal;
+}
+
+#custom > ul > li:hover {
+  background-color: #459528;
+  color: #fff;
+}
+
+/* custom2 */
+
+#custom2 {
+  height: 40px;
+  min-width: 100px;
+}
+
+#custom2 > button, #custom2 > ul  {
+  border-radius: 0;
+  color: #b11631;
+}
+
+#custom2 > button {
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+}
+
+#custom2 > button:after {
+  content: "";
+}
+
+#custom2 > ul {
+  right: -100%;
+  top: 0;
+  margin: 0 -2px 0 0;
+  height: 40px;
+  border: 1px solid #ccc;
+}

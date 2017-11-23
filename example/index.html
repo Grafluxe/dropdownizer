@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dropdownizer Examples</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../style/dropdownizer.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+    <h1>Dropdownizer Examples</h1>
+    <code>npm i dropdownizer</code>
+    <br>
+    <select>
+      <option>One</option>
+      <option>Two</option>
+    </select>
+    &larr; Default Style
+    <hr>
+    <select class="top-list">
+      <option selected>Three</option>
+      <option disabled>Four</option>
+      <option label="Fifth Item">Five</option>
+    </select>
+    <hr>
+    <select id="custom">
+      <option>Six</option>
+      <option>Seven</option>
+      <option>Eight</option>
+    </select>
+    <hr>
+    <select id="custom2">
+      <option>Nine</option>
+      <option>Ten</option>
+    </select>
+    <hr>
+    Last change: <span id="selection">...</span>
+  </section>
+  <script src="../dist/Dropdownizer.min.js"></script>
+  <script>
+    new Dropdownizer(document.querySelectorAll("select")).change(evt => {
+      document.querySelector("#selection").innerHTML = evt.data.label || evt.data.value;
+    });
+  </script>
+</body>
+</html>
