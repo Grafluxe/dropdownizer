@@ -84,10 +84,21 @@ class Dropdownize {
 
   _bindEvents() {
     this._onClickBtn = this._openList.bind(this);
-    this._onMouseLeave = () => setTimeout(this._closeList.bind(this), 250);
+    this._onMouseOver = this._mouseOver.bind(this);
+    this._onMouseLeave = this._mouseLeave.bind(this);
     this._onChange = this._syncDropdowns.bind(this);
     this._onClickListItem = this._listSelect.bind(this);
     this._onDocClick = this._preventNativeClick.bind(this);
+  }
+
+  _mouseLeave() {
+    this._leaveTimer = setTimeout(this._closeList.bind(this), 250);
+    this._ui.div.addEventListener("mouseover", this._onMouseOver);
+  }
+
+  _mouseOver() {
+    this._ui.div.removeEventListener("mouseover", this._onMouseOver);
+    clearTimeout(this._leaveTimer);
   }
 
   _convertOptionsToListItems() {
@@ -264,6 +275,7 @@ class Dropdownize {
   removeListeners() {
     this._ui.btn.removeEventListener("click", this._onClickBtn);
     this._ui.div.removeEventListener("mouseleave", this._onMouseLeave);
+    this._ui.div.removeEventListener("mouseover", this._onMouseOver);
     this._el.removeEventListener("change", this._onChange);
     document.removeEventListener("click", this._onDocClick);
 
