@@ -39,7 +39,7 @@
   </section>
   <script src="../dist/Dropdownizer.min.js"></script>
   <script>
-    new Dropdownizer(document.querySelectorAll("select")).change(evt => {
+    new Dropdownizer("select").change(evt => {
       document.querySelector("#selection").innerHTML = evt.data.label || evt.data.value;
     });
   </script>

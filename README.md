@@ -56,22 +56,16 @@ See the [documentation](http://grafluxe.com/o/doc/dropdownizer/Dropdownizer.html
 
 ## Examples
 
-Pass in a `string` to quickly bind to the *first found*  element.
+Pass in a `string` to bind to the matching element(s).
 
 ```
-new Dropdownizer("#my-dd");
+new Dropdownizer("select");
 ```
 
-Pass in an `array` to quickly bind to the *first found* elements.
+Pass in an `DOM element` to bind to the matching element(s).
 
 ```
-new Dropdownizer(["#my-dd", ".dropdown"]);
-```
-
-Pass in an `DOM element` to bind to the returned element(s).
-
-```
-new Dropdownizer(document.querySelectorAll("select"));
+new Dropdownizer(document.querySelector("select"));
 ```
 
 Use the `change` method.

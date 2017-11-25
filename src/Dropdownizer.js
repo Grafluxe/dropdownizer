@@ -10,24 +10,26 @@ class Dropdownizer {
     let dds = [];
 
     if (typeof el === "string") {
-      el = document.querySelector(el);
-    } else if(el instanceof Array) {
-      el = el.map(element => document.querySelector(element));
+      el = document.querySelectorAll(el);
     }
 
     if (!el) {
       throw new Error("No such element exists.");
     }
 
-    if (el.nodeType) {
-      dds.push(new Dropdownize(el));
-    } else {
-      el.forEach(element => {
-        dds.push(new Dropdownize(element));
-      });
-    }
+    try {
+      if (el.nodeType) {
+        dds.push(new Dropdownize(el));
+      } else {
+        el.forEach(element => {
+          dds.push(new Dropdownize(element));
+        });
+      }
 
-    this._dropdowns = Object.freeze(dds);
+      this._dropdowns = Object.freeze(dds);
+    } catch (err) {
+      throw new TypeError("Unexpected argument.");
+    }
   }
 
   selectItem(index) {
