@@ -27,27 +27,31 @@ class Dropdownizer {
       });
     }
 
-    this.dropdowns = Object.freeze(dds);
+    this._dropdowns = Object.freeze(dds);
   }
 
   selectItem(index) {
-    this.dropdowns.forEach(dropdown => dropdown.selectItem(index));
+    this._dropdowns.forEach(dropdown => dropdown.selectItem(index));
     return this;
   }
 
   change(callback) {
-    this.dropdowns.forEach(dropdown => dropdown.change(callback));
+    this._dropdowns.forEach(dropdown => dropdown.change(callback));
     return this;
   }
 
   removeListeners() {
-    this.dropdowns.forEach(dropdown => dropdown.removeListeners());
+    this._dropdowns.forEach(dropdown => dropdown.removeListeners());
     return this;
   }
 
   destroy(resetOriginalElement = false) {
-    this.dropdowns.forEach(dropdown => dropdown.destroy(resetOriginalElement));
+    this._dropdowns.forEach(dropdown => dropdown.destroy(resetOriginalElement));
     return this;
+  }
+
+  get dropdowns() {
+    return this._dropdowns;
   }
 
   static preventNative() {
