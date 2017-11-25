@@ -5,7 +5,15 @@
 */
 
 class Dropdownizer {
-
+  /**
+   * Creates a new Dropdownizer instance.
+   * @throws {ReferenceError}     Throws if no such element exists in the DOM.
+   * @throws {TypeError}          Throws if an unexpected argument is passed in.
+   * @param  {String|HTMLElement} el The element to dropdownize.
+   * @example
+   * new Dropdownizer("select");
+   * new Dropdownizer(document.querySelector("#my-dd");
+   */
   constructor(el) {
     let dds = [];
 
@@ -32,38 +40,72 @@ class Dropdownizer {
     }
   }
 
+  /**
+   * Programmatically select list items.
+   * @throws  {Error}        Throws if the index if out of bounds.
+   * @param   {Number}       index The list items index.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
   selectItem(index) {
     this._dropdowns.forEach(dropdown => dropdown.selectItem(index));
     return this;
   }
 
+  /**
+   * Listens for change events.
+   * @param   {Function}     callback The callback function to execute when a list item changes.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
   change(callback) {
     this._dropdowns.forEach(dropdown => dropdown.change(callback));
     return this;
   }
 
+  /**
+   * Removes all listeners.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
   removeListeners() {
     this._dropdowns.forEach(dropdown => dropdown.removeListeners());
     return this;
   }
 
+  /**
+   * Removes listeners and destroys the dropdownizer instances.
+   * @param   {Boolean}      resetOriginalElement=false Whether to reset the original 'select' elements.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
   destroy(resetOriginalElement = false) {
     this._dropdowns.forEach(dropdown => dropdown.destroy(resetOriginalElement));
     return this;
   }
 
+  /**
+   * Gets all dropdowns.
+   */
   get dropdowns() {
     return this._dropdowns;
   }
 
+  /**
+   * Prevents native mobile dropdowns. If prevented, dropdowns on mobile/touchable devices will work as
+   * they do on desktops.
+   */
   static preventNative() {
     Dropdownize._preventNative = true;
   }
 
 }
 
+/**
+ * @ignore
+ */
 class Dropdownize {
-
+  /**
+   * Creates a new Dropdownize instance.
+   * @throws {ReferenceError} Throws if the element already has the reserved class name 'dropdownizer.'
+   * @param  {HTMLElement}    el The element to dropdownize.
+   */
   constructor(el) {
     this._el = el;
 
@@ -233,6 +275,12 @@ class Dropdownize {
     this._el.classList = "dd-x";
   }
 
+  /**
+   * Programmatically select a list item.
+   * @throws  {RangeError}  Throws if the index if out of bounds.
+   * @param   {Number}      index The list items index.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
   selectItem(index) {
     let listItem = this._listItems[index];
 
@@ -273,11 +321,20 @@ class Dropdownize {
     return this;
   }
 
+  /**
+   * Listens for change events.
+   * @param   {Function}    callback The callback function to execute when a list item changes.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
   change(callback) {
     this._changeCallback = callback;
     return this;
   }
 
+  /**
+   * Removes all listeners.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
   removeListeners() {
     this._ui.btn.removeEventListener("click", this._onClickBtn);
     this._ui.div.removeEventListener("mouseleave", this._onMouseLeave);
@@ -292,6 +349,11 @@ class Dropdownize {
     return this;
   }
 
+  /**
+   * Removes listeners and destroys the dropdownizer instance.
+   * @param   {Boolean}     resetOriginalElement=false Whether to reset the original 'select' element.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
   destroy(resetOriginalElement = false) {
     if (!this._destroyed) {
       this._destroyed = true;
