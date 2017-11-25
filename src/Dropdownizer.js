@@ -4,7 +4,7 @@
 * @license MIT
 */
 
-class Dropdownizer{
+class Dropdownizer {
 
   constructor(el) {
     let dds = [];
@@ -213,6 +213,20 @@ class Dropdownize {
     this._closeList();
   }
 
+  _addToDOM() {
+    this._el.parentNode.insertBefore(this._ui.div, this._el.nextSibling);
+
+    if (this._el.id) {
+      this._origId = this._el.id;
+
+      this._ui.div.id = this._el.id;
+      this._el.id = "__" + this._el.id;
+    }
+
+    this._origClasses = this._el.classList.toString();
+    this._el.classList = "dd-x";
+  }
+
   selectItem(index) {
     let listItem = this._listItems[index];
 
@@ -251,20 +265,6 @@ class Dropdownize {
 
     this._changeFromOriginalElement = false;
     return this;
-  }
-
-  _addToDOM() {
-    this._el.parentNode.insertBefore(this._ui.div, this._el.nextSibling);
-
-    if (this._el.id) {
-      this._origId = this._el.id;
-
-      this._ui.div.id = this._el.id;
-      this._el.id = "__" + this._el.id;
-    }
-
-    this._origClasses = this._el.classList.toString();
-    this._el.classList = "dd-x";
   }
 
   change(callback) {
