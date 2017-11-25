@@ -13,8 +13,8 @@ class Dropdownizer {
       el = document.querySelectorAll(el);
     }
 
-    if (!el) {
-      throw new Error("No such element exists.");
+    if (!el || el.length === 0) {
+      throw new ReferenceError("No such element exists.");
     }
 
     try {
@@ -68,7 +68,7 @@ class Dropdownize {
     this._el = el;
 
     if (el.classList.contains("dropdownizer")) {
-      throw new Error("The class name 'dropdownizer' is reserved. Please choose a different class name.");
+      throw new ReferenceError("The class name 'dropdownizer' is reserved. Please choose a different class name.");
     }
 
     this._createElements();
@@ -237,7 +237,7 @@ class Dropdownize {
     let listItem = this._listItems[index];
 
     if (!listItem) {
-      throw new Error("Your index is out of bounds.");
+      throw new RangeError("Your index is out of bounds.");
     }
 
     if (listItem === this._listItems[this._lastSelectedIndex]) {
