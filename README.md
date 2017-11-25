@@ -1,14 +1,14 @@
 # Dropdownizer
 
-Convert HTML `select` elements into customizable dropdowns.
+Converts HTML `select` elements into customizable dropdowns.
 
 This project...
 
 - Is lightweight and dependency free.
 - Includes support for native mobile dropdowns.
 - Keeps original `select` elements in sync.
-- Properly resizes the dropdown to match longest line.
-- Works with a standard `change` event and proprietary `change` method.
+- Properly resizes the dropdown to match the longest line.
+- Works with standard `change` events and a proprietary `change` method.
 
 ## Usage
 
@@ -62,7 +62,7 @@ Pass in a `string` to bind to the matching element(s).
 new Dropdownizer("select");
 ```
 
-Pass in an `DOM element` to bind to the matching element(s).
+Pass in an `HTMLElement` to bind to the matching element(s).
 
 ```
 new Dropdownizer(document.querySelector("select"));
@@ -88,7 +88,7 @@ dropdown.addEventListener("change", evt => {
 new Dropdownizer(dropdown);
 ```
 
-See [examples](http://grafluxe.com/o/doc/dropdownizer/example).
+See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 
 ## Notes
 
