@@ -298,12 +298,17 @@ class Dropdownize {
 
   /**
    * Programmatically select a list item.
-   * @throws  {RangeError}  Throws if the index if out of bounds.
-   * @param   {Number}      index The list items index.
-   * @returns {Dropdownize} The Dropdownize instance.
+   * @throws  {Error}         Throws if your search returns multiple matches.
+   * @throws  {RangeError}    Throws if the index is out of bounds.
+   * @param   {Number|String} at The list items index or value.
+   * @returns {Dropdownize}   The Dropdownize instance.
    */
-  selectItem(index) {
-    let listItem = this._listItems[index];
+  selectItem(at) {
+    if (typeof at === "string") {
+      at = this._convertToIndex(at);
+    }
+
+    let listItem = this._listItems[at];
 
     if (!listItem) {
       throw new RangeError("Your index is out of bounds.");
@@ -314,7 +319,7 @@ class Dropdownize {
     }
 
     this._listItems[this._lastSelectedIndex].removeAttribute("data-selected");
-    this._lastSelectedIndex = index;
+    this._lastSelectedIndex = at;
 
     this._ui.btn.innerHTML = listItem.innerHTML;
     listItem.setAttribute("data-selected", true);
@@ -331,6 +336,22 @@ class Dropdownize {
 
     this._changeFromOriginalElement = false;
     return this;
+  }
+
+  _convertToIndex(at) {
+    at = at.toLowerCase();
+
+    let match = this._listItems.filter(li => {
+      let val = li.dataset.label || li.dataset.value;
+
+      return val.toLowerCase() === at;
+    });
+
+    if (match.length > 1) {
+      throw new Error("Your search returns multiple matches. Use an index instead.");
+    }
+
+    return this._listItems.indexOf(match[0]);
   }
 
   _callbackArgs(listItem, type) {
