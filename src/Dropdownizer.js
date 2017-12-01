@@ -312,16 +312,7 @@ class Dropdownize {
     this._el.selectedIndex = this._lastSelectedIndex;
 
     if (this._changeCallback) {
-      let data = Object.assign({}, listItem.dataset);
-
-      delete data.selected;
-
-      this._changeCallback({
-        type: "change",
-        target: this._ui.div,
-        selectedTarget: listItem,
-        data
-      });
+      this._changeCallback(this._callbackArgs(listItem, "change"));
     }
 
     if (!this._changeFromOriginalElement) {
@@ -330,6 +321,25 @@ class Dropdownize {
 
     this._changeFromOriginalElement = false;
     return this;
+  }
+
+  _callbackArgs(listItem, type) {
+    let data = Object.assign({index: this._lastSelectedIndex}, listItem.dataset),
+        out;
+
+    delete data.selected;
+
+    out = {
+      target: this._ui.div,
+      selectedTarget: listItem,
+      data
+    };
+
+    if (type) {
+      out.type = type;
+    }
+
+    return out;
   }
 
   /**
