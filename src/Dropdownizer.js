@@ -7,44 +7,35 @@
 class Dropdownizer {
   /**
    * Creates a new Dropdownizer instance.
+   * @throws {TypeError}          Throws if an unexpected argument was passed in.
    * @throws {ReferenceError}     Throws if no such element exists in the DOM.
-   * @throws {TypeError}          Throws if an unexpected argument is passed in.
-   * @param  {String|HTMLElement} el The element to dropdownize.
-   * @example
-   * new Dropdownizer("select");
-   * new Dropdownizer(document.querySelector("#my-dd");
+   * @throws {ReferenceError}     Throws if your element has already been dropdownized.
+   * @throws {ReferenceError}     Throws if your element already has the reserved class name 'dropdownizer.'
+   * @param  {String|HTMLElement} el The element(s) to dropdownize.
    */
   constructor(el) {
     let dds = [];
 
     if (typeof el === "string") {
       el = document.querySelectorAll(el);
+    } else if (el && el.nodeType) {
+      el = [el];
     }
 
-    if (!el || el.length === 0) {
+    if (!el || !el.forEach || el.length === 0) {
       throw new ReferenceError("No such element exists.");
     }
 
-    try {
-      if (el.nodeType) {
-        dds.push(new Dropdownize(el));
-      } else {
-        el.forEach(element => {
-          dds.push(new Dropdownize(element));
-        });
-      }
-
-      this._dropdowns = Object.freeze(dds);
-    } catch (err) {
-      throw new TypeError("Unexpected argument.");
-    }
+    el.forEach(element => dds.push(new Dropdownize(element)));
+    this._dropdowns = Object.freeze(dds);
   }
 
   /**
    * Programmatically select list items.
-   * @throws  {Error}        Throws if the index if out of bounds.
-   * @param   {Number}       index The list items index.
-   * @returns {Dropdownizer} The Dropdownizer instance.
+   * @throws  {Error}         Throws if your search returns multiple matches.
+   * @throws  {RangeError}    Throws if the index is out of bounds.
+   * @param   {Number|String} at The list items index or value.
+   * @returns {Dropdownizer}  The Dropdownizer instance.
    */
   selectItem(index) {
     this._dropdowns.forEach(dropdown => dropdown.selectItem(index));
@@ -103,15 +94,34 @@ class Dropdownizer {
 class Dropdownize {
   /**
    * Creates a new Dropdownize instance.
-   * @throws {ReferenceError} Throws if the element already has the reserved class name 'dropdownizer.'
-   * @param  {HTMLElement}    el The element to dropdownize.
+   * @throws {TypeError}          Throws if an unexpected argument was passed in.
+   * @throws {ReferenceError}     Throws if no such element exists in the DOM.
+   * @throws {ReferenceError}     Throws if your element has already been dropdownized.
+   * @throws {ReferenceError}     Throws if your element already has the reserved class name 'dropdownizer.'
+   * @param  {String|HTMLElement} el The element to dropdownize.
    */
   constructor(el) {
-    this._el = el;
+    if (typeof el === "string") {
+      el = document.querySelector(el);
+    }
+
+    if (!el || el.length === 0) {
+      throw new ReferenceError("No such element exists.");
+    }
+
+    if (!el.nodeType) {
+      throw new TypeError("An unexpected argument was passed in.");
+    }
+
+    if (el.hasOwnProperty("dropdownized") || el.hasOwnProperty("dropdownizer")) {
+      throw new ReferenceError("Your element has already been dropdownized.");
+    }
 
     if (el.classList.contains("dropdownizer")) {
       throw new ReferenceError("The class name 'dropdownizer' is reserved. Please choose a different class name.");
     }
+
+    this._el = el;
 
     this._createElements();
     this._bindEvents();
@@ -272,6 +282,7 @@ class Dropdownize {
     }
 
     this._origClasses = this._el.classList.toString();
+    this._el.dropdownized = true;
     this._el.classList = "dd-x";
   }
 
