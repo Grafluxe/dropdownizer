@@ -43,6 +43,16 @@ class Dropdownizer {
   }
 
   /**
+   * Gets informations of the currently selected list item(s).
+   * @type {Array|Object}
+   */
+  get selectedItem() {
+    let selectedItems = this._dropdowns.map(dropdown => dropdown.selectedItem);
+
+    return (selectedItems.length > 1 ? selectedItems : selectedItems[0]);
+  }
+
+  /**
    * Listens for change events.
    * @param   {Function}     callback The callback function to execute when a list item changes.
    * @returns {Dropdownizer} The Dropdownizer instance.
@@ -340,6 +350,14 @@ class Dropdownize {
     }
 
     return out;
+  }
+
+  /**
+   * Gets informations of the currently selected list item.
+   * @type {Object}
+   */
+  get selectedItem() {
+    return this._callbackArgs(this._listItems[this._lastSelectedIndex]);
   }
 
   /**
