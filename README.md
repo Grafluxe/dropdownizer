@@ -96,6 +96,19 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 - The `change` event and proprietary `change` method differ in what's returned.
   - The `change` event is dispatched from the original element while the `change` method belongs to the dropdownizer instance.
 
+## Changelog
+
+### 1.1.0
+
+- Add the ability to programmatically select a list item by its names (via the `selectItem` method).
+  - String searches are not case-sensitive.
+- Add `selectedItem` getter.
+- Improve error catching.
+
+### 1.0.0
+
+- Initial Release
+
 ## License
 
 Copyright (c) 2015, 2017 Leandro Silva (http://grafluxe.com)

@@ -15,12 +15,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Dropdownizer = function () {
   /**
    * Creates a new Dropdownizer instance.
+   * @throws {TypeError}          Throws if an unexpected argument was passed in.
    * @throws {ReferenceError}     Throws if no such element exists in the DOM.
-   * @throws {TypeError}          Throws if an unexpected argument is passed in.
-   * @param  {String|HTMLElement} el The element to dropdownize.
-   * @example
-   * new Dropdownizer("select");
-   * new Dropdownizer(document.querySelector("#my-dd");
+   * @throws {ReferenceError}     Throws if your element has already been dropdownized.
+   * @throws {ReferenceError}     Throws if your element already has the reserved class name 'dropdownizer.'
+   * @param  {String|HTMLElement} el The element(s) to dropdownize.
    */
   function Dropdownizer(el) {
     _classCallCheck(this, Dropdownizer);
@@ -29,32 +28,27 @@ var Dropdownizer = function () {
 
     if (typeof el === "string") {
       el = document.querySelectorAll(el);
+    } else if (el && el.nodeType) {
+      el = [el];
     }
 
-    if (!el || el.length === 0) {
+    if (!el || !el.forEach || el.length === 0) {
       throw new ReferenceError("No such element exists.");
     }
 
-    try {
-      if (el.nodeType) {
-        dds.push(new Dropdownize(el));
-      } else {
-        el.forEach(function (element) {
-          dds.push(new Dropdownize(element));
-        });
-      }
-
-      this._dropdowns = Object.freeze(dds);
-    } catch (err) {
-      throw new TypeError("Unexpected argument.");
-    }
+    el.forEach(function (element) {
+      return dds.push(new Dropdownize(element));
+    });
+    this._dropdowns = Object.freeze(dds);
   }
 
   /**
    * Programmatically select list items.
-   * @throws  {Error}        Throws if the index if out of bounds.
-   * @param   {Number}       index The list items index.
-   * @returns {Dropdownizer} The Dropdownizer instance.
+   * @throws  {Error}         Throws if your search returns multiple matches.
+   * @throws  {RangeError}    Throws if the index is out of bounds.
+   * @param   {Number|String} at The list items index or name. Note that if using a
+   *                             string, letter case is ignored
+   * @returns {Dropdownizer}  The Dropdownizer instance.
    */
 
 
@@ -68,13 +62,19 @@ var Dropdownizer = function () {
     }
 
     /**
-     * Listens for change events.
-     * @param   {Function}     callback The callback function to execute when a list item changes.
-     * @returns {Dropdownizer} The Dropdownizer instance.
+     * Gets information about the currently selected list item(s).
+     * @type {Array|Object}
      */
 
   }, {
     key: "change",
+
+
+    /**
+     * Listens for change events.
+     * @param   {Function}     callback The callback function to execute when a list item changes.
+     * @returns {Dropdownizer} The Dropdownizer instance.
+     */
     value: function change(callback) {
       this._dropdowns.forEach(function (dropdown) {
         return dropdown.change(callback);
@@ -118,6 +118,15 @@ var Dropdownizer = function () {
      */
 
   }, {
+    key: "selectedItem",
+    get: function get() {
+      var selectedItems = this._dropdowns.map(function (dropdown) {
+        return dropdown.selectedItem;
+      });
+
+      return selectedItems.length > 1 ? selectedItems : selectedItems[0];
+    }
+  }, {
     key: "dropdowns",
     get: function get() {
       return this._dropdowns;
@@ -146,17 +155,36 @@ var Dropdownizer = function () {
 var Dropdownize = function () {
   /**
    * Creates a new Dropdownize instance.
-   * @throws {ReferenceError} Throws if the element already has the reserved class name 'dropdownizer.'
-   * @param  {HTMLElement}    el The element to dropdownize.
+   * @throws {TypeError}          Throws if an unexpected argument was passed in.
+   * @throws {ReferenceError}     Throws if no such element exists in the DOM.
+   * @throws {ReferenceError}     Throws if your element has already been dropdownized.
+   * @throws {ReferenceError}     Throws if your element already has the reserved class name 'dropdownizer.'
+   * @param  {String|HTMLElement} el The element to dropdownize.
    */
   function Dropdownize(el) {
     _classCallCheck(this, Dropdownize);
 
-    this._el = el;
+    if (typeof el === "string") {
+      el = document.querySelector(el);
+    }
+
+    if (!el || el.length === 0) {
+      throw new ReferenceError("No such element exists.");
+    }
+
+    if (!el.nodeType) {
+      throw new TypeError("An unexpected argument was passed in.");
+    }
+
+    if (el.hasOwnProperty("dropdownized") || el.hasOwnProperty("dropdownizer")) {
+      throw new ReferenceError("Your element has already been dropdownized.");
+    }
 
     if (el.classList.contains("dropdownizer")) {
       throw new ReferenceError("The class name 'dropdownizer' is reserved. Please choose a different class name.");
     }
+
+    this._el = el;
 
     this._createElements();
     this._bindEvents();
@@ -340,20 +368,27 @@ var Dropdownize = function () {
       }
 
       this._origClasses = this._el.classList.toString();
+      this._el.dropdownized = true;
       this._el.classList = "dd-x";
     }
 
     /**
      * Programmatically select a list item.
-     * @throws  {RangeError}  Throws if the index if out of bounds.
-     * @param   {Number}      index The list items index.
-     * @returns {Dropdownize} The Dropdownize instance.
+     * @throws  {Error}         Throws if your search returns multiple matches.
+     * @throws  {RangeError}    Throws if the index is out of bounds.
+     * @param   {Number|String} at The list items index or name. Note that if using a
+     *                             string, letter case is ignored.
+     * @returns {Dropdownize}   The Dropdownize instance.
      */
 
   }, {
     key: "selectItem",
-    value: function selectItem(index) {
-      var listItem = this._listItems[index];
+    value: function selectItem(at) {
+      if (typeof at === "string") {
+        at = this._convertToIndex(at);
+      }
+
+      var listItem = this._listItems[at];
 
       if (!listItem) {
         throw new RangeError("Your index is out of bounds.");
@@ -364,7 +399,7 @@ var Dropdownize = function () {
       }
 
       this._listItems[this._lastSelectedIndex].removeAttribute("data-selected");
-      this._lastSelectedIndex = index;
+      this._lastSelectedIndex = at;
 
       this._ui.btn.innerHTML = listItem.innerHTML;
       listItem.setAttribute("data-selected", true);
@@ -372,16 +407,7 @@ var Dropdownize = function () {
       this._el.selectedIndex = this._lastSelectedIndex;
 
       if (this._changeCallback) {
-        var data = Object.assign({}, listItem.dataset);
-
-        delete data.selected;
-
-        this._changeCallback({
-          type: "change",
-          target: this._ui.div,
-          selectedTarget: listItem,
-          data: data
-        });
+        this._changeCallback(this._callbackArgs(listItem, "change"));
       }
 
       if (!this._changeFromOriginalElement) {
@@ -391,15 +417,58 @@ var Dropdownize = function () {
       this._changeFromOriginalElement = false;
       return this;
     }
+  }, {
+    key: "_convertToIndex",
+    value: function _convertToIndex(at) {
+      at = at.toLowerCase();
+
+      var match = this._listItems.filter(function (li) {
+        var val = li.dataset.label || li.dataset.value;
+
+        return val.toLowerCase() === at;
+      });
+
+      if (match.length > 1) {
+        throw new Error("Your search returns multiple matches. Use an index instead.");
+      }
+
+      return this._listItems.indexOf(match[0]);
+    }
+  }, {
+    key: "_callbackArgs",
+    value: function _callbackArgs(listItem, type) {
+      var data = Object.assign({ index: this._lastSelectedIndex }, listItem.dataset),
+          out = void 0;
+
+      delete data.selected;
+
+      out = {
+        target: this._ui.div,
+        selectedTarget: listItem,
+        data: data
+      };
+
+      if (type) {
+        out.type = type;
+      }
+
+      return out;
+    }
+
+    /**
+     * Gets information about the currently selected list item.
+     * @type {Object}
+     */
+
+  }, {
+    key: "change",
+
 
     /**
      * Listens for change events.
      * @param   {Function}    callback The callback function to execute when a list item changes.
      * @returns {Dropdownize} The Dropdownize instance.
      */
-
-  }, {
-    key: "change",
     value: function change(callback) {
       this._changeCallback = callback;
       return this;
@@ -455,6 +524,11 @@ var Dropdownize = function () {
       }
 
       return this;
+    }
+  }, {
+    key: "selectedItem",
+    get: function get() {
+      return this._callbackArgs(this._listItems[this._lastSelectedIndex]);
     }
   }]);
 
