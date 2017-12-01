@@ -34,7 +34,8 @@ class Dropdownizer {
    * Programmatically select list items.
    * @throws  {Error}         Throws if your search returns multiple matches.
    * @throws  {RangeError}    Throws if the index is out of bounds.
-   * @param   {Number|String} at The list items index or value.
+   * @param   {Number|String} at The list items index or name. Note that if using a
+   *                             string, letter case is ignored
    * @returns {Dropdownizer}  The Dropdownizer instance.
    */
   selectItem(index) {
@@ -43,7 +44,7 @@ class Dropdownizer {
   }
 
   /**
-   * Gets informations of the currently selected list item(s).
+   * Gets information about the currently selected list item(s).
    * @type {Array|Object}
    */
   get selectedItem() {
@@ -300,7 +301,8 @@ class Dropdownize {
    * Programmatically select a list item.
    * @throws  {Error}         Throws if your search returns multiple matches.
    * @throws  {RangeError}    Throws if the index is out of bounds.
-   * @param   {Number|String} at The list items index or value.
+   * @param   {Number|String} at The list items index or name. Note that if using a
+   *                             string, letter case is ignored.
    * @returns {Dropdownize}   The Dropdownize instance.
    */
   selectItem(at) {
@@ -374,7 +376,7 @@ class Dropdownize {
   }
 
   /**
-   * Gets informations of the currently selected list item.
+   * Gets information about the currently selected list item.
    * @type {Object}
    */
   get selectedItem() {
