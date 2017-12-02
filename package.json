@@ -26,11 +26,11 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
-    "boxy-jsdoc-template": "^1.0.0",
+    "boxy-jsdoc-template": "^2.0.1",
     "chokidar-cli": "^1.2.0",
-    "eslint": "^4.11.0",
+    "eslint": "^4.12.1",
     "jsdoc": "^3.4.3",
     "preamble-cli": "^1.0.0",
-    "uglify-js": "^3.1.10"
+    "uglify-js": "^3.2.0"
   }
 }
