@@ -7,20 +7,18 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
-* @author Leandro Silva
-* @copyright 2015, 2017 Leandro Silva (http://grafluxe.com)
-* @license MIT
-*/
-
+ * @author Leandro Silva
+ * @copyright 2015, 2017 Leandro Silva (http://grafluxe.com)
+ * @license MIT
+ *
+ * @desc   Creates a new Dropdownizer instance.
+ * @throws {TypeError}          Throws if an unexpected argument was passed in.
+ * @throws {ReferenceError}     Throws if no such element exists in the DOM.
+ * @throws {ReferenceError}     Throws if your element has already been dropdownized.
+ * @throws {ReferenceError}     Throws if your element already has the reserved class name 'dropdownizer.'
+ * @param  {String|HTMLElement} el The element(s) to dropdownize.
+ */
 var Dropdownizer = function () {
-  /**
-   * Creates a new Dropdownizer instance.
-   * @throws {TypeError}          Throws if an unexpected argument was passed in.
-   * @throws {ReferenceError}     Throws if no such element exists in the DOM.
-   * @throws {ReferenceError}     Throws if your element has already been dropdownized.
-   * @throws {ReferenceError}     Throws if your element already has the reserved class name 'dropdownizer.'
-   * @param  {String|HTMLElement} el The element(s) to dropdownize.
-   */
   function Dropdownizer(el) {
     _classCallCheck(this, Dropdownizer);
 
