@@ -71,6 +71,24 @@ class Dropdownizer {
   }
 
   /**
+   * Enables the disabled dropdowns.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
+  enable() {
+    this._dropdowns.forEach(dropdown => dropdown.enable());
+    return this;
+  }
+
+  /**
+   * Disables the dropdowns.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
+  disable() {
+    this._dropdowns.forEach(dropdown => dropdown.disable());
+    return this;
+  }
+
+  /**
    * Removes listeners and destroys the dropdownizer instances.
    * @param   {Boolean}      resetOriginalElement=false Whether to reset the original 'select' elements.
    * @returns {Dropdownizer} The Dropdownizer instance.
@@ -425,6 +443,28 @@ class Dropdownize {
     this._listItems.forEach(listItem => {
       listItem.removeEventListener("click", this._onClickListItem);
     });
+
+    return this;
+  }
+
+  /**
+   * Enables a disabled dropdown.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
+  enable() {
+    this._el.removeAttribute("disabled");
+    this._ui.div.removeAttribute("data-disabled");
+
+    return this;
+  }
+
+  /**
+   * Disables the dropdown.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
+  disable() {
+    this._el.setAttribute("disabled", "true");
+    this._ui.div.setAttribute("data-disabled", "true");
 
     return this;
   }

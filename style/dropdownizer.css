@@ -12,6 +12,7 @@
   font-family: sans-serif;
   font-size: 11px;
   min-width: 60px;
+  user-select: none;
 }
 
 .dropdownizer button, .dropdownizer ul  {
@@ -73,13 +74,14 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.dropdownizer li[data-selected="true"] {
+.dropdownizer li[data-selected] {
   font-weight: bold;
 }
 
-.dropdownizer li[data-disabled="true"] {
+.dropdownizer[data-disabled], .dropdownizer li[data-disabled] {
   background-color: transparent;
   opacity: 0.4;
+  pointer-events: none;
 }
 
 .dd-open ul {
