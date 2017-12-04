@@ -92,11 +92,21 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 
 ## Notes
 
-- Styles applied directly to the `select` element and/or its `id` are not copied to the dropdownizer instance. Use classes if you want sync styles.
+- Non-inline styles applied directly to the `select` element and/or its `id` are not copied to the dropdownizer instance. Use classes if you want sync styles.
 - The `change` event and proprietary `change` method differ in what's returned.
   - The `change` event is dispatched from the original element while the `change` method belongs to the dropdownizer instance.
 
 ## Changelog
+
+### 1.3.0
+
+- Add `disable` and `enable` methods.
+- Copy all attributes from the `select` element to its dropdownizer instance.
+  - Attributes that are part of the `div` W3C spec are copied as is; all other attributes are copied as a `data-*` attribute.
+
+### 1.2.0
+
+- Update dependencies
 
 ### 1.1.0
 
