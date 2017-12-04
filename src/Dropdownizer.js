@@ -200,9 +200,29 @@ class Dropdownize {
 
   _setBtn() {
     this._touchable = window.hasOwnProperty("ontouchstart") || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    this._copySelectElementAttributes();
     this._bindFromOriginalElement();
     this._ui.btn.addEventListener("click", this._onClickBtn);
     this._ui.btn.innerHTML = this._options[this._lastSelectedIndex].label;
+  }
+
+  _copySelectElementAttributes() {
+    let supportedInDivSpec = [
+      "accesskey", "class", "contenteditable", "contextmenu", "id", "dir",
+      "draggable", "dropzone", "hidden", "id", "itemid", "itemprop", "itemref",
+      "itemscope", "itemtype", "lang", "slot", "name", "spellcheck", "style",
+      "tabindex", "title", "translate"
+    ];
+
+    Array.from(this._el.attributes).forEach(attr => {
+      let dataTag = "";
+
+      if (!supportedInDivSpec.includes(attr.name) && attr.name.slice(0, 5) !== "data-") {
+        dataTag = "data-";
+      }
+
+      this._ui.div.setAttribute(dataTag + attr.name, attr.value || true);
+    });
   }
 
   _openList(evt) {
