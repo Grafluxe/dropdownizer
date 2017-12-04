@@ -95,6 +95,34 @@ var Dropdownizer = function () {
     }
 
     /**
+     * Enables the disabled dropdowns.
+     * @returns {Dropdownizer} The Dropdownizer instance.
+     */
+
+  }, {
+    key: "enable",
+    value: function enable() {
+      this._dropdowns.forEach(function (dropdown) {
+        return dropdown.enable();
+      });
+      return this;
+    }
+
+    /**
+     * Disables the dropdowns.
+     * @returns {Dropdownizer} The Dropdownizer instance.
+     */
+
+  }, {
+    key: "disable",
+    value: function disable() {
+      this._dropdowns.forEach(function (dropdown) {
+        return dropdown.disable();
+      });
+      return this;
+    }
+
+    /**
      * Removes listeners and destroys the dropdownizer instances.
      * @param   {Boolean}      resetOriginalElement=false Whether to reset the original 'select' elements.
      * @returns {Dropdownizer} The Dropdownizer instance.
@@ -264,9 +292,27 @@ var Dropdownize = function () {
     key: "_setBtn",
     value: function _setBtn() {
       this._touchable = window.hasOwnProperty("ontouchstart") || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+      this._copySelectElementAttributes();
       this._bindFromOriginalElement();
       this._ui.btn.addEventListener("click", this._onClickBtn);
       this._ui.btn.innerHTML = this._options[this._lastSelectedIndex].label;
+    }
+  }, {
+    key: "_copySelectElementAttributes",
+    value: function _copySelectElementAttributes() {
+      var _this3 = this;
+
+      var supportedInDivSpec = ["accesskey", "class", "contenteditable", "contextmenu", "id", "dir", "draggable", "dropzone", "hidden", "id", "itemid", "itemprop", "itemref", "itemscope", "itemtype", "lang", "slot", "name", "spellcheck", "style", "tabindex", "title", "translate"];
+
+      Array.from(this._el.attributes).forEach(function (attr) {
+        var dataTag = "";
+
+        if (!supportedInDivSpec.includes(attr.name) && attr.name.slice(0, 5) !== "data-") {
+          dataTag = "data-";
+        }
+
+        _this3._ui.div.setAttribute(dataTag + attr.name, attr.value || true);
+      });
     }
   }, {
     key: "_openList",
@@ -337,10 +383,10 @@ var Dropdownize = function () {
   }, {
     key: "_addListItemsListeners",
     value: function _addListItemsListeners() {
-      var _this3 = this;
+      var _this4 = this;
 
       this._listItems.forEach(function (listItem) {
-        listItem.addEventListener("click", _this3._onClickListItem);
+        listItem.addEventListener("click", _this4._onClickListItem);
       });
     }
   }, {
@@ -480,7 +526,7 @@ var Dropdownize = function () {
   }, {
     key: "removeListeners",
     value: function removeListeners() {
-      var _this4 = this;
+      var _this5 = this;
 
       this._ui.btn.removeEventListener("click", this._onClickBtn);
       this._ui.div.removeEventListener("mouseleave", this._onMouseLeave);
@@ -489,8 +535,36 @@ var Dropdownize = function () {
       document.removeEventListener("click", this._onDocClick);
 
       this._listItems.forEach(function (listItem) {
-        listItem.removeEventListener("click", _this4._onClickListItem);
+        listItem.removeEventListener("click", _this5._onClickListItem);
       });
+
+      return this;
+    }
+
+    /**
+     * Enables a disabled dropdown.
+     * @returns {Dropdownize} The Dropdownize instance.
+     */
+
+  }, {
+    key: "enable",
+    value: function enable() {
+      this._el.removeAttribute("disabled");
+      this._ui.div.removeAttribute("data-disabled");
+
+      return this;
+    }
+
+    /**
+     * Disables the dropdown.
+     * @returns {Dropdownize} The Dropdownize instance.
+     */
+
+  }, {
+    key: "disable",
+    value: function disable() {
+      this._el.setAttribute("disabled", "true");
+      this._ui.div.setAttribute("data-disabled", "true");
 
       return this;
     }
