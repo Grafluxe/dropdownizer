@@ -98,6 +98,10 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 
 ## Changelog
 
+### 1.3.1
+
+- Improve auto-size logic.
+
 ### 1.3.0
 
 - Add `disable` and `enable` methods.
