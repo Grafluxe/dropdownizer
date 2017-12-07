@@ -294,8 +294,14 @@ class Dropdownize {
   }
 
   _setDropdown() {
+    let pad = 0;
+
+    if (this._touchable && window.getComputedStyle(this._el)["min-width"] === "0px") {
+      pad = 9;
+    }
+
     this._ui.div.dropdownizer = this;
-    this._ui.div.style.width = this._el.offsetWidth + "px";
+    this._ui.div.style.width = this._el.offsetWidth + pad + "px";
     this._ui.div.classList = this._el.classList;
     this._ui.div.classList.add("dropdownizer");
 
