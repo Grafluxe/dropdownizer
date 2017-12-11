@@ -95,8 +95,15 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 - Non-inline styles applied directly to the `select` element and/or its `id` are not copied to the dropdownizer instance. Use classes if you want sync styles.
 - The `change` event and proprietary `change` method differ in what's returned.
   - The `change` event is dispatched from the original element while the `change` method belongs to the dropdownizer instance.
+- Auto-size logic is not 100% accurate when a dropdown is initially invisible. Please test accordingly if your dropdown starts off in a hidden state.
 
 ## Changelog
+
+### 1.3.2
+
+- Add fail-safe for auto-size logic (for cases where the `select` element is initially hidden).
+  - This feature is in beta.
+- Properly support the 'hidden' attribute.
 
 ### 1.3.1
 

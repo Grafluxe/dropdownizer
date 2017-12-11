@@ -260,12 +260,17 @@ var Dropdownize = function () {
       this._listItems = [];
       this._lastSelectedIndex = 0;
       this._options = this._el.querySelectorAll("option");
+      this._longestLine = 0;
 
       this._options.forEach(function (option, i) {
         var listItem = document.createElement("li");
 
         _this._setAttributes(listItem, option, i);
         listItem.innerHTML = option.label;
+
+        if (option.label.length > _this._longestLine) {
+          _this._longestLine = option.label.length;
+        }
 
         _this._listItems.push(listItem);
         _this._ui.ul.appendChild(listItem);
@@ -372,27 +377,43 @@ var Dropdownize = function () {
   }, {
     key: "_setDropdown",
     value: function _setDropdown() {
-      var pad = 0;
+      var _this4 = this;
 
-      if (this._touchable && window.getComputedStyle(this._el)["min-width"] === "0px") {
-        pad = 9;
+      var computedStyles = window.getComputedStyle(this._el),
+          divWidth = this._el.offsetWidth;
+
+      if (this._touchable && computedStyles.minWidth === "0px") {
+        divWidth += 9;
       }
 
       this._ui.div.dropdownizer = this;
-      this._ui.div.style.width = this._el.offsetWidth + pad + "px";
+      this._ui.div.style.minWidth = divWidth + "px";
       this._ui.div.classList = this._el.classList;
       this._ui.div.classList.add("dropdownizer");
 
       this._ui.div.appendChild(this._ui.btn);
       this._ui.div.appendChild(this._ui.ul);
+
+      if (this._el.offsetWidth === 0) {
+        // Reestimate width if 'offsetWidth' is 0. Added since invisible items have a 0 'offsetWidth'.
+        setTimeout(function () {
+          var btnComputedStyles = window.getComputedStyle(_this4._ui.btn),
+              padding = parseInt(btnComputedStyles.paddingLeft) + parseInt(btnComputedStyles.paddingRight),
+              fontSize = Math.max(parseInt(computedStyles.fontSize), parseInt(btnComputedStyles.fontSize));
+
+          divWidth = Math.ceil(fontSize / 2 * _this4._longestLine + padding);
+
+          _this4._ui.div.style.minWidth = divWidth + "px";
+        }, 0);
+      }
     }
   }, {
     key: "_addListItemsListeners",
     value: function _addListItemsListeners() {
-      var _this4 = this;
+      var _this5 = this;
 
       this._listItems.forEach(function (listItem) {
-        listItem.addEventListener("click", _this4._onClickListItem);
+        listItem.addEventListener("click", _this5._onClickListItem);
       });
     }
   }, {
@@ -532,7 +553,7 @@ var Dropdownize = function () {
   }, {
     key: "removeListeners",
     value: function removeListeners() {
-      var _this5 = this;
+      var _this6 = this;
 
       this._ui.btn.removeEventListener("click", this._onClickBtn);
       this._ui.div.removeEventListener("mouseleave", this._onMouseLeave);
@@ -541,7 +562,7 @@ var Dropdownize = function () {
       document.removeEventListener("click", this._onDocClick);
 
       this._listItems.forEach(function (listItem) {
-        listItem.removeEventListener("click", _this5._onClickListItem);
+        listItem.removeEventListener("click", _this6._onClickListItem);
       });
 
       return this;
