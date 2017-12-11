@@ -190,12 +190,17 @@ class Dropdownize {
     this._listItems = [];
     this._lastSelectedIndex = 0;
     this._options = this._el.querySelectorAll("option");
+    this._longestLine = 0;
 
     this._options.forEach((option, i) => {
       let listItem = document.createElement("li");
 
       this._setAttributes(listItem, option, i);
       listItem.innerHTML = option.label;
+
+      if (option.label.length > this._longestLine) {
+        this._longestLine = option.label.length;
+      }
 
       this._listItems.push(listItem);
       this._ui.ul.appendChild(listItem);
@@ -302,12 +307,25 @@ class Dropdownize {
     }
 
     this._ui.div.dropdownizer = this;
-    this._ui.div.style.width = divWidth + "px";
+    this._ui.div.style.minWidth = divWidth + "px";
     this._ui.div.classList = this._el.classList;
     this._ui.div.classList.add("dropdownizer");
 
     this._ui.div.appendChild(this._ui.btn);
     this._ui.div.appendChild(this._ui.ul);
+
+    if (this._el.offsetWidth === 0) {
+      // Reestimate width if 'offsetWidth' is 0. Added since invisible items have a 0 'offsetWidth'.
+      setTimeout(() => {
+        let btnComputedStyles = window.getComputedStyle(this._ui.btn),
+            padding = parseInt(btnComputedStyles.paddingLeft) + parseInt(btnComputedStyles.paddingRight),
+            fontSize = Math.max(parseInt(computedStyles.fontSize), parseInt(btnComputedStyles.fontSize));
+
+        divWidth = Math.ceil((fontSize / 2) * this._longestLine + padding);
+
+        this._ui.div.style.minWidth = divWidth + "px";
+      }, 0);
+    }
   }
 
   _addListItemsListeners() {
