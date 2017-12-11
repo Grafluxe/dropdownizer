@@ -7,12 +7,15 @@
 @charset "UTF-8";
 
 .dropdownizer {
-  display: inline-block;
   position: relative;
   font-family: sans-serif;
   font-size: 11px;
   min-width: 60px;
   user-select: none;
+}
+
+.dropdownizer:not([hidden]) {
+  display: inline-block;
 }
 
 .dropdownizer button, .dropdownizer ul  {
