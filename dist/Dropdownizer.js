@@ -72,10 +72,54 @@ var Dropdownizer = function () {
      * Listens for change events.
      * @param   {Function}     callback The callback function to execute when a list item changes.
      * @returns {Dropdownizer} The Dropdownizer instance.
+     * @deprecated This method has been renamed to 'onChange'.
      */
     value: function change(callback) {
+      console.warn("The Dropdownizer method 'change' has been renamed to 'onChange'. Please update your logic accordingly, as the 'change' method will be removed in a future release.");
+      return this.onChange(callback);
+    }
+
+    /**
+     * Listens for change events.
+     * @param   {Function}     callback The callback function to execute when a list item changes.
+     * @returns {Dropdownizer} The Dropdownizer instance.
+     */
+
+  }, {
+    key: "onChange",
+    value: function onChange(callback) {
       this._dropdowns.forEach(function (dropdown) {
-        return dropdown.change(callback);
+        return dropdown.onChange(callback);
+      });
+      return this;
+    }
+
+    /**
+     * Listens for open events.
+     * @param   {Function}    callback The callback function to execute when a dropdown is opened.
+     * @returns {Dropdownizer} The Dropdownizer instance.
+     */
+
+  }, {
+    key: "onOpen",
+    value: function onOpen(callback) {
+      this._dropdowns.forEach(function (dropdown) {
+        return dropdown.onOpen(callback);
+      });
+      return this;
+    }
+
+    /**
+     * Listens for close events.
+     * @param   {Function}    callback The callback function to execute when a dropdown is closed.
+     * @returns {Dropdownizer} The Dropdownizer instance.
+     */
+
+  }, {
+    key: "onClose",
+    value: function onClose(callback) {
+      this._dropdowns.forEach(function (dropdown) {
+        return dropdown.onClose(callback);
       });
       return this;
     }
@@ -345,6 +389,13 @@ var Dropdownize = function () {
           }
         }
       }
+
+      if (this._openCallback && this._ui.div.classList.contains("dd-open")) {
+        this._openCallback({
+          target: this._ui.div,
+          type: "open"
+        });
+      }
     }
   }, {
     key: "_preventNativeClick",
@@ -357,7 +408,16 @@ var Dropdownize = function () {
   }, {
     key: "_closeList",
     value: function _closeList() {
-      this._ui.div.classList.remove("dd-open");
+      if (this._ui.div.classList.contains("dd-open")) {
+        this._ui.div.classList.remove("dd-open");
+
+        if (this._closeCallback) {
+          this._closeCallback({
+            target: this._ui.div,
+            type: "close"
+          });
+        }
+      }
     }
   }, {
     key: "_bindFromOriginalElement",
@@ -532,7 +592,7 @@ var Dropdownize = function () {
      */
 
   }, {
-    key: "change",
+    key: "onChange",
 
 
     /**
@@ -540,8 +600,34 @@ var Dropdownize = function () {
      * @param   {Function}    callback The callback function to execute when a list item changes.
      * @returns {Dropdownize} The Dropdownize instance.
      */
-    value: function change(callback) {
+    value: function onChange(callback) {
       this._changeCallback = callback;
+      return this;
+    }
+
+    /**
+     * Listens for an open event.
+     * @param   {Function}    callback The callback function to execute when a dropdown is opened.
+     * @returns {Dropdownize} The Dropdownize instance.
+     */
+
+  }, {
+    key: "onOpen",
+    value: function onOpen(callback) {
+      this._openCallback = callback;
+      return this;
+    }
+
+    /**
+     * Listens for a close event.
+     * @param   {Function}    callback The callback function to execute when a dropdown is closed.
+     * @returns {Dropdownize} The Dropdownize instance.
+     */
+
+  }, {
+    key: "onClose",
+    value: function onClose(callback) {
+      this._closeCallback = callback;
       return this;
     }
 
