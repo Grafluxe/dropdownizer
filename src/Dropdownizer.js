@@ -55,9 +55,20 @@ class Dropdownizer {
    * Listens for change events.
    * @param   {Function}     callback The callback function to execute when a list item changes.
    * @returns {Dropdownizer} The Dropdownizer instance.
+   * @deprecated This method has been renamed to 'onChange'.
    */
   change(callback) {
-    this._dropdowns.forEach(dropdown => dropdown.change(callback));
+    console.warn("The Dropdownizer method 'change' has been renamed to 'onChange'. Please update your logic accordingly, as the 'change' method will be removed in a future release.");
+    return this.onChange(callback);
+  }
+
+  /**
+   * Listens for change events.
+   * @param   {Function}     callback The callback function to execute when a list item changes.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
+  onChange(callback) {
+    this._dropdowns.forEach(dropdown => dropdown.onChange(callback));
     return this;
   }
 
@@ -485,7 +496,7 @@ class Dropdownize {
    * @param   {Function}    callback The callback function to execute when a list item changes.
    * @returns {Dropdownize} The Dropdownize instance.
    */
-  change(callback) {
+  onChange(callback) {
     this._changeCallback = callback;
     return this;
   }
