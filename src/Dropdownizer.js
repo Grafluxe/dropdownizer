@@ -62,6 +62,26 @@ class Dropdownizer {
   }
 
   /**
+   * Listens for open events.
+   * @param   {Function}    callback The callback function to execute when a dropdown is opened.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
+  onOpen(callback) {
+    this._dropdowns.forEach(dropdown => dropdown.onOpen(callback));
+    return this;
+  }
+
+  /**
+   * Listens for close events.
+   * @param   {Function}    callback The callback function to execute when a dropdown is closed.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
+  onClose(callback) {
+    this._dropdowns.forEach(dropdown => dropdown.onClose(callback));
+    return this;
+  }
+
+  /**
    * Removes all listeners.
    * @returns {Dropdownizer} The Dropdownizer instance.
    */
@@ -272,6 +292,13 @@ class Dropdownize {
         }
       }
     }
+
+    if (this._openCallback && this._ui.div.classList.contains("dd-open")) {
+      this._openCallback({
+        target: this._ui.div,
+        type: "open"
+      });
+    }
   }
 
   _preventNativeClick(evt) {
@@ -282,7 +309,16 @@ class Dropdownize {
   }
 
   _closeList() {
-    this._ui.div.classList.remove("dd-open");
+    if (this._ui.div.classList.contains("dd-open")) {
+      this._ui.div.classList.remove("dd-open");
+
+      if (this._closeCallback) {
+        this._closeCallback({
+          target: this._ui.div,
+          type: "close"
+        });
+      }
+    }
   }
 
   _bindFromOriginalElement() {
@@ -451,6 +487,26 @@ class Dropdownize {
    */
   change(callback) {
     this._changeCallback = callback;
+    return this;
+  }
+
+  /**
+   * Listens for an open event.
+   * @param   {Function}    callback The callback function to execute when a dropdown is opened.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
+  onOpen(callback) {
+    this._openCallback = callback;
+    return this;
+  }
+
+  /**
+   * Listens for a close event.
+   * @param   {Function}    callback The callback function to execute when a dropdown is closed.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
+  onClose(callback) {
+    this._closeCallback = callback;
     return this;
   }
 
