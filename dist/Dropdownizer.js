@@ -770,11 +770,14 @@ var Dropdownize = function () {
       var attributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var at = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : NaN;
 
-      var option = document.createElement("option");
+      var option = document.createElement("option"),
+          existingOptions = Array.from(this._el.childNodes).filter(function (node) {
+        return node.nodeName === "OPTION";
+      });
 
       option.innerHTML = value;
 
-      this._el.insertBefore(option, this._el.childNodes[at]);
+      this._el.insertBefore(option, existingOptions[at]);
       this._options.splice(at, 0, option);
 
       if (attributes.hasOwnProperty("label")) {
