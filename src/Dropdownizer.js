@@ -29,15 +29,16 @@ class Dropdownizer {
   }
 
   /**
-   * Programmatically select list items.
+   * Programmatically selects list items.
    * @throws  {Error}         Throws if your search returns multiple matches.
    * @throws  {RangeError}    Throws if the index is out of bounds.
-   * @param   {Number|String} at The list items index or name. Note that if using a
-   *                             string, letter case is ignored
+   * @param   {Number|String} at The list items index or name. Use a negative number to select
+   *                             from the end of the list. Note that if using a string, letter case
+   *                             is ignored.
    * @returns {Dropdownizer}  The Dropdownizer instance.
    */
-  selectItem(index) {
-    this._dropdowns.forEach(dropdown => dropdown.selectItem(index));
+  selectItem(at) {
+    this._dropdowns.forEach(dropdown => dropdown.selectItem(at));
     return this;
   }
 
@@ -406,16 +407,21 @@ class Dropdownize {
   }
 
   /**
-   * Programmatically select a list item.
+   * Programmatically selects a list item.
    * @throws  {Error}         Throws if your search returns multiple matches.
    * @throws  {RangeError}    Throws if the index is out of bounds.
-   * @param   {Number|String} at The list items index or name. Note that if using a
-   *                             string, letter case is ignored.
+   * @param   {Number|String} at The list items index or name. Use a negative number to select
+   *                             from the end of the list. Note that if using a string, letter case
+   *                             is ignored.
    * @returns {Dropdownize}   The Dropdownize instance.
    */
   selectItem(at) {
     if (typeof at === "string") {
       at = this._convertToIndex(at);
+    }
+
+    if (at < 0) {
+      at = this._listItems.length + at;
     }
 
     let listItem = this._listItems[at];
