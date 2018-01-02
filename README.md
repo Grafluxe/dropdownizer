@@ -109,6 +109,11 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 
 ## Changelog
 
+### 1.5.1
+
+- Fix item insertion issue for the original element
+  - The `addItem` method was not inserting the new list item into the correct index of the original `select` element.
+
 ### 1.5.0
 
 - Add methods to programmatically add/remove items.
