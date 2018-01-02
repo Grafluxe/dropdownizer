@@ -382,7 +382,7 @@ class Dropdownize {
   }
 
   _listSelect(evt) {
-    if (evt.target.dataset.disabled) {
+    if (evt.target.dataset.disabled || evt.target === this.selectedItem.selectedTarget) {
       return;
     }
 
