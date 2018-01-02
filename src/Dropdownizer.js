@@ -93,6 +93,36 @@ class Dropdownizer {
     return this;
   }
 
+   /**
+   * Deletes list items. Note that this method properly syncs your original select elements.
+   * @throws  {Error}         Throws if your search returns multiple matches.
+   * @throws  {RangeError}    Throws if the index is out of bounds.
+   * @param   {Number|String} at The list items index or name. Use a negative number to select
+   *                             from the end of the list. Note that if using a string, letter case
+   *                             is ignored.
+   * @returns {Dropdownizer}  The Dropdownizer instance.
+   */
+  removeItem(at) {
+    this._dropdowns.forEach(dropdown => dropdown.removeItem(at));
+    return this;
+  }
+
+  /**
+   * Adds list items. Note that this method properly syncs your original select elements.
+   * @throws  {RangeError}   Throws if the index is out of bounds.
+   * @param   {String}       value         The items value.
+   * @param   {Object}       attributes={} Attributes to add to the list item. The supported
+   *                                       properties are 'label', 'disabled', and 'selected'.
+   * @param   {Number}       at=NaN        The index in which to insert your new list item
+   *                                       (defaults to the last item if not set). Use a
+   *                                       negative number to insert from the end of the list.
+   * @returns {Dropdownizer} The Dropdownizer instance.
+   */
+  addItem(value, attributes = {}, at = NaN) {
+    this._dropdowns.forEach(dropdown => dropdown.addItem(value, attributes, at));
+    return this;
+  }
+
   /**
    * Removes all listeners.
    * @returns {Dropdownizer} The Dropdownizer instance.
@@ -221,7 +251,7 @@ class Dropdownize {
   _convertOptionsToListItems() {
     this._listItems = [];
     this._lastSelectedIndex = 0;
-    this._options = this._el.querySelectorAll("option");
+    this._options = Array.from(this._el.querySelectorAll("option"));
     this._longestLine = 0;
 
     this._options.forEach((option, i) => {
@@ -525,6 +555,131 @@ class Dropdownize {
   onClose(callback) {
     this._closeCallback = callback;
     return this;
+  }
+
+  /**
+   * Deletes a list item. Note that this method properly syncs your original select element.
+   * @throws  {Error}         Throws if your search returns multiple matches.
+   * @throws  {RangeError}    Throws if the index is out of bounds.
+   * @param   {Number|String} at The list items index or name. Use a negative number to select
+   *                             from the end of the list. Note that if using a string, letter case
+   *                             is ignored.
+   * @returns {Dropdownize}   The Dropdownize instance.
+   */
+  removeItem(at) {
+    if (typeof at === "string") {
+      at = this._convertToIndex(at);
+    }
+
+    if (at < 0) {
+      at = this._listItems.length + at;
+    }
+
+    let listItem = this._listItems[at];
+
+    if (!listItem) {
+      throw new RangeError("Your index is out of bounds.");
+    }
+
+    this._ui.ul.removeChild(listItem);
+    this._listItems.splice(at, 1);
+
+    this._el.removeChild(this._options[at]);
+    this._options.splice(at, 1);
+
+    if (at === this._lastSelectedIndex) {
+      let next = Math.max(at - 1, 0);
+
+      this._lastSelectedIndex = next;
+
+      if (this._listItems.length > 0) {
+        this._ui.btn.innerHTML = this._listItems[next].innerHTML;
+        this._listItems[next].setAttribute("data-selected", true);
+      } else {
+        this._ui.btn.innerHTML = "&nbsp;";
+      }
+
+      this._el.selectedIndex = this._lastSelectedIndex;
+    }
+
+    return this;
+  }
+
+  /**
+   * Adds a list item. Note that this method properly syncs your original select element.
+   * @throws  {RangeError}  Throws if the index is out of bounds.
+   * @param   {String}      value         The items value.
+   * @param   {Object}      attributes={} Attributes to add to the list item. The supported
+   *                                      properties are 'label', 'disabled', and 'selected'.
+   * @param   {Number}      at=NaN        The index in which to insert your new list item
+   *                                      (defaults to the last item if not set). Use a
+   *                                      negative number to insert from the end of the list.
+   * @returns {Dropdownize} The Dropdownize instance.
+   */
+  addItem(value, attributes = {}, at = NaN) {
+    if (at < 0) {
+      at = this._listItems.length + at;
+    }
+
+    if (at > this._el.childElementCount || at < 0) {
+      throw new RangeError("Your index is out of bounds.");
+    } else if (isNaN(at) || at === null) {
+      at = this._el.childElementCount;
+    }
+
+    this._addToSelect(value, attributes, at);
+    this._addToList(value, attributes, at);
+
+    return this;
+  }
+
+  _addToSelect(value, attributes = {}, at) {
+    let option = document.createElement("option");
+
+    option.innerHTML = value;
+
+    this._el.insertBefore(option, this._el.childNodes[at]);
+    this._options.splice(at, 0, option);
+
+    if (attributes.hasOwnProperty("label")) {
+      option.setAttribute("label", attributes.label || true);
+    }
+
+    if (attributes.hasOwnProperty("disabled")) {
+      option.setAttribute("disabled", attributes.disabled || true);
+    }
+
+    if (attributes.hasOwnProperty("selected")) {
+      option.setAttribute("selected", attributes.selected || true);
+    }
+  }
+
+  _addToList(value, attributes = {}, at) {
+    let li = document.createElement("li");
+
+    li.dataset.value = value;
+    li.innerHTML = attributes.label || value;
+
+    this._ui.ul.insertBefore(li, this._ui.ul.childNodes[at]);
+    this._listItems.splice(at, 0, li);
+
+    li.addEventListener("click", this._onClickListItem);
+
+    if (attributes.hasOwnProperty("label")) {
+      li.setAttribute("data-label", attributes.label || true);
+    }
+
+    if (attributes.hasOwnProperty("disabled")) {
+      li.setAttribute("data-disabled", attributes.disabled || true);
+    }
+
+    if (attributes.hasOwnProperty("selected")) {
+      li.setAttribute("data-selected", attributes.selected || true);
+
+      if (!attributes.hasOwnProperty("disabled")) {
+         this.selectItem(at);
+      }
+    }
   }
 
   /**
