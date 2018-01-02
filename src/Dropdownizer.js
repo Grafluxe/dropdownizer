@@ -111,9 +111,9 @@ class Dropdownizer {
    * Adds list items. Note that this method properly syncs your original select elements.
    * @throws  {RangeError}   Throws if the index is out of bounds.
    * @param   {String}       value         The items value.
-   * @param   {Object}       attributes={} Attributes to add to the list item. The supported
+   * @param   {Object=}      attributes={} Attributes to add to the list item. The supported
    *                                       properties are 'label', 'disabled', and 'selected'.
-   * @param   {Number}       at=NaN        The index in which to insert your new list item
+   * @param   {Number=}      at=NaN        The index in which to insert your new list item
    *                                       (defaults to the last item if not set). Use a
    *                                       negative number to insert from the end of the list.
    * @returns {Dropdownizer} The Dropdownizer instance.
@@ -152,7 +152,7 @@ class Dropdownizer {
 
   /**
    * Removes listeners and destroys the dropdownizer instances.
-   * @param   {Boolean}      resetOriginalElement=false Whether to reset the original 'select' elements.
+   * @param   {Boolean=}     resetOriginalElement=false Whether to reset the original 'select' elements.
    * @returns {Dropdownizer} The Dropdownizer instance.
    */
   destroy(resetOriginalElement = false) {
@@ -609,9 +609,9 @@ class Dropdownize {
    * Adds a list item. Note that this method properly syncs your original select element.
    * @throws  {RangeError}  Throws if the index is out of bounds.
    * @param   {String}      value         The items value.
-   * @param   {Object}      attributes={} Attributes to add to the list item. The supported
+   * @param   {Object=}     attributes={} Attributes to add to the list item. The supported
    *                                      properties are 'label', 'disabled', and 'selected'.
-   * @param   {Number}      at=NaN        The index in which to insert your new list item
+   * @param   {Number=}     at=NaN        The index in which to insert your new list item
    *                                      (defaults to the last item if not set). Use a
    *                                      negative number to insert from the end of the list.
    * @returns {Dropdownize} The Dropdownize instance.
@@ -633,7 +633,7 @@ class Dropdownize {
     return this;
   }
 
-  _addToSelect(value, attributes = {}, at) {
+  _addToSelect(value, attributes = {}, at = NaN) {
     let option = document.createElement("option");
 
     option.innerHTML = value;
@@ -654,7 +654,7 @@ class Dropdownize {
     }
   }
 
-  _addToList(value, attributes = {}, at) {
+  _addToList(value, attributes = {}, at = NaN) {
     let li = document.createElement("li");
 
     li.dataset.value = value;
@@ -724,7 +724,7 @@ class Dropdownize {
 
   /**
    * Removes listeners and destroys the dropdownizer instance.
-   * @param   {Boolean}     resetOriginalElement=false Whether to reset the original 'select' element.
+   * @param   {Boolean=}    resetOriginalElement=false Whether to reset the original 'select' element.
    * @returns {Dropdownize} The Dropdownize instance.
    */
   destroy(resetOriginalElement = false) {
