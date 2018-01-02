@@ -634,11 +634,12 @@ class Dropdownize {
   }
 
   _addToSelect(value, attributes = {}, at = NaN) {
-    let option = document.createElement("option");
+    let option = document.createElement("option"),
+        existingOptions = Array.from(this._el.childNodes).filter(node => node.nodeName === "OPTION");
 
     option.innerHTML = value;
 
-    this._el.insertBefore(option, this._el.childNodes[at]);
+    this._el.insertBefore(option, existingOptions[at]);
     this._options.splice(at, 0, option);
 
     if (attributes.hasOwnProperty("label")) {
