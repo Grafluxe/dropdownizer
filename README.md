@@ -109,6 +109,11 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 
 ## Changelog
 
+### 1.5.0
+
+- Add methods to programmatically add/remove items.
+- Logic improvements.
+
 ### 1.4.0
 
 - Rename `change` method to `onChange`.
