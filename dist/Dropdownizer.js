@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @author Leandro Silva
- * @copyright 2015, 2017 Leandro Silva (http://grafluxe.com)
+ * @copyright 2015, 2017-2018 Leandro Silva (http://grafluxe.com)
  * @license MIT
  *
  * @desc   Creates a new Dropdownizer instance.
@@ -820,6 +820,10 @@ var Dropdownize = function () {
         li.setAttribute("data-selected", attributes.selected || true);
 
         if (!attributes.hasOwnProperty("disabled")) {
+          if (at === 0) {
+            this._lastSelectedIndex++;
+          }
+
           this.selectItem(at);
         }
       }

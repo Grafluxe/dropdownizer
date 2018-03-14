@@ -1,7 +1,9 @@
 # Changelog
 
-## Latest (2018-03-14)
+## 1.5.2 (2018-03-14)
 
+- [Update README](https://github.com/Grafluxe/dropdownizer/commit/acc9277)
+- [Add CHANGELOG](https://github.com/Grafluxe/dropdownizer/commit/e593d9a)
 - [Fix issue with programmatically adding new items](https://github.com/Grafluxe/dropdownizer/commit/65cde5c)
 
 ## 1.5.1 (2018-01-02)
