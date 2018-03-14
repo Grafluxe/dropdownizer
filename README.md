@@ -109,56 +109,11 @@ See [live examples](http://grafluxe.com/o/doc/dropdownizer/example).
 
 ## Changelog
 
-### 1.5.1
-
-- Fix item insertion issue for the original element
-  - The `addItem` method was not inserting the new list item into the correct index of the original `select` element.
-
-### 1.5.0
-
-- Add methods to programmatically add/remove items.
-- Logic improvements.
-
-### 1.4.0
-
-- Rename `change` method to `onChange`.
-  - The `change` method is still supported, but with a deprecation warning.
-- Add `open` and `close` events.
-
-### 1.3.2
-
-- Add fail-safe for auto-size logic (for cases where the `select` element is initially hidden).
-  - This feature is in beta.
-- Properly support the 'hidden' attribute.
-
-### 1.3.1
-
-- Improve auto-size logic.
-
-### 1.3.0
-
-- Add `disable` and `enable` methods.
-- Copy all attributes from the `select` element to its dropdownizer instance.
-  - Attributes that are part of the `div` W3C spec are copied as is; all other attributes are copied as a `data-*` attribute.
-
-### 1.2.0
-
-- Update dependencies
-
-### 1.1.0
-
-- Add the ability to programmatically select a list item by its names (via the `selectItem` method).
-  - String searches are not case-sensitive.
-- Add `selectedItem` getter.
-- Improve error catching.
-
-### 1.0.0
-
-- Initial Release
+See the [changelog here](CHANGELOG.md).
 
 ## License
 
-Copyright (c) 2015, 2017 Leandro Silva (http://grafluxe.com)
+Copyright (c) 2015, 2017-2018 Leandro Silva (http://grafluxe.com)
 
 Released under the MIT License.
 
