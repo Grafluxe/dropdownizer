@@ -1,6 +1,6 @@
 /**
  * @author Leandro Silva
- * @copyright 2015, 2017 Leandro Silva (http://grafluxe.com)
+ * @copyright 2015, 2017-2018 Leandro Silva (http://grafluxe.com)
  * @license MIT
  *
  * @desc   Creates a new Dropdownizer instance.
@@ -678,7 +678,11 @@ class Dropdownize {
       li.setAttribute("data-selected", attributes.selected || true);
 
       if (!attributes.hasOwnProperty("disabled")) {
-         this.selectItem(at);
+        if (at === 0) {
+          this._lastSelectedIndex++;
+        }
+
+        this.selectItem(at);
       }
     }
   }
