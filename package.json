@@ -10,7 +10,8 @@
     "minify": "uglifyjs dist/Dropdownizer.js -mco dist/Dropdownizer.min.js",
     "preamble": "preamble -p \"/*github.com/Grafluxe/dropdownizer*/\n\" -o ./dist/Dropdownizer.min.js",
     "doc": "jsdoc -c .jsdocrc",
-    "watch": "chokidar src/Dropdownizer.js -c 'npm run babel' --initial"
+    "watch": "chokidar src/Dropdownizer.js -c 'npm run babel' --initial",
+    "changelog": "git-to-changelog"
   },
   "author": "Leandro Silva (http://grafluxe.com)",
   "homepage": "https://github.com/Grafluxe/dropdownizer",
@@ -29,6 +30,7 @@
     "boxy-jsdoc-template": "^2.0.2",
     "chokidar-cli": "^1.2.0",
     "eslint": "^4.14.0",
+    "git-to-changelog": "^1.2.1",
     "jsdoc": "^3.4.3",
     "preamble-cli": "^1.0.0",
     "uglify-js": "^3.3.4"
